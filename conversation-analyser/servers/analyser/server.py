@@ -227,7 +227,15 @@ async def analyse_conversation(
         model_hint=model_hint or None,
     )
 
-    return analysis_result.model_dump()
+    if isinstance(analysis_result, AnalysisError):
+        return analysis_result.model_dump()
+
+    # Return structured content so the client knows how to handle it
+    return {
+        "summary": analysis_result.summary,
+        "scorecard_html": analysis_result.scorecard_html,
+        "model_used": analysis_result.model_used,
+    }
 
 
 @mcp.tool()
@@ -291,7 +299,14 @@ async def analyse_benchmark_conversations(
         model_hint=model_hint or None,
     )
 
-    return analysis_result.model_dump()
+    if isinstance(analysis_result, AnalysisError):
+        return analysis_result.model_dump()
+
+    return {
+        "summary": analysis_result.summary,
+        "scorecard_html": analysis_result.scorecard_html,
+        "model_used": analysis_result.model_used,
+    }
 
 
 @mcp.prompt()
@@ -306,6 +321,50 @@ def conversation_analysis(
 
     prompts = _load_prompts()
     return _get_system_prompt(work_type, analysis_type, None, prompts)
+
+
+@mcp.tool()
+def render_scorecard(
+    data: str,
+    work_type: str = "personal_benchmark",
+    analysis_type: str = "benchmark",
+) -> dict:
+    """
+    Generate the HTML scorecard artifact from raw analysis data (JSON string).
+
+    Useful if you have performed the analysis manually or via another tool
+    and just want to generate the visual dashboard.
+
+    Args:
+        data: JSON string containing the analysis results (summary, sections, etc.)
+        work_type: The work type setup (default: personal_benchmark)
+        analysis_type: The analysis type (default: benchmark)
+    """
+    import json
+    from .analyser import build_scorecard
+
+    try:
+        synthesis_data = json.loads(data)
+    except json.JSONDecodeError:
+        return {"error": "Invalid JSON data provided."}
+
+    html_content = build_scorecard(
+        analysis_type=analysis_type,
+        work_type=work_type,
+        synthesis_data=synthesis_data,
+        chunk_count=1,
+        model_used="manual/external",
+        source_format="json",
+        turn_count=0,
+    )
+
+    return {
+        "summary": synthesis_data.get(
+            "summary", "Scorecard generated from external data."
+        ),
+        "scorecard_html": html_content,
+        "model_used": "manual/external",
+    }
 
 
 def main() -> None:

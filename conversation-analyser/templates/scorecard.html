@@ -5,346 +5,252 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Conversation Scorecard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ── Design Tokens ── */
     :root {
-      --bg: #0d0f18;
-      --surface: #161927;
-      --surface2: #1e2235;
-      --border: #272b42;
-      --accent: #6c63ff;
-      --accent2: #00d4aa;
-      --accent3: #ff6b9d;
-      --text: #e2e8f0;
-      --muted: #7a8499;
-      --radius: 14px;
-      --radius-sm: 8px;
-      --shadow: 0 8px 32px rgba(0, 0, 0, .5);
-      --transition: .22s cubic-bezier(.4, 0, .2, 1);
+      --base-bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --primary: #38bdf8;
+      --secondary: #818cf8;
+      --accent: #f472b6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --gradient-1: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      --gradient-2: linear-gradient(135deg, #f472b6 0%, #fb923c 100%);
+      --radius: 24px;
+      --transition: .3s cubic-bezier(.4, 0, .2, 1);
     }
 
-    /* ── Reset & Base ── */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
+    * {
       margin: 0;
       padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
+      box-sizing: border-box;
     }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--base-bg);
+      color: var(--text-main);
       min-height: 100vh;
-      padding: 2.5rem 1.5rem;
-      line-height: 1.6;
-    }
-
-    /* ── Layout ── */
-    .container {
-      max-width: 860px;
-      margin: 0 auto;
-    }
-
-    /* ── Header ── */
-    .header {
-      margin-bottom: 2rem;
-    }
-
-    .header h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -.03em;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: .5rem;
-    }
-
-    .meta-row {
       display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+      background-image:
+        radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(244, 114, 182, 0.08) 0%, transparent 40%);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .glass {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 32px;
+      padding: 40px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .meta-badges {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
       flex-wrap: wrap;
-      gap: .5rem;
-      align-items: center;
-      margin-bottom: 1.25rem;
     }
 
     .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .35rem;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: .25rem .75rem;
-      font-size: .78rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      color: var(--muted);
-      letter-spacing: .02em;
-    }
-
-    .badge .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-    }
-
-    .badge.accent .dot {
-      background: var(--accent);
-    }
-
-    .badge.accent2 .dot {
-      background: var(--accent2);
-    }
-
-    .badge.accent3 .dot {
-      background: var(--accent3);
-    }
-
-    /* ── Summary Box ── */
-    .summary-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem 1.75rem;
-      margin-bottom: 2rem;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .summary-box::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-    }
-
-    .summary-box p {
-      color: var(--text);
-      line-height: 1.8;
-    }
-
-    /* ── Section Title ── */
-    .section-title {
-      font-size: .75rem;
-      font-weight: 700;
-      letter-spacing: .12em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin: 2rem 0 .75rem;
+      letter-spacing: 1px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
     }
 
-    /* ── Accordion Cards ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: .6rem;
-      box-shadow: var(--shadow);
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .h-stat {
+      text-align: center;
+    }
+
+    .h-stat-val {
+      font-size: 2rem;
+      font-weight: 700;
+      display: block;
+      color: var(--primary);
+    }
+
+    .h-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .summary-box {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      line-height: 1.7;
+    }
+
+    .grid-sections {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Accordion / Cards */
+    .section-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      margin-bottom: 15px;
       overflow: hidden;
-      transition: border-color var(--transition), box-shadow var(--transition);
+      transition: var(--transition);
     }
 
-    .card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 8px 32px rgba(108, 99, 255, .15);
-    }
-
-    .card:focus-within {
-      border-color: var(--accent);
-      outline: none;
+    .section-card:hover {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.04);
     }
 
     .card-header {
+      padding: 16px 20px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: .75rem;
-      padding: 1rem 1.25rem;
       cursor: pointer;
       user-select: none;
-      transition: background var(--transition);
-    }
-
-    .card-header:hover {
-      background: var(--surface2);
-    }
-
-    .card-icon {
-      font-size: 1.1rem;
-      flex-shrink: 0;
     }
 
     .card-title {
-      flex: 1;
       font-weight: 600;
-      font-size: .95rem;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .score-badge {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff;
-      border-radius: 20px;
-      padding: .15rem .65rem;
-      font-size: .75rem;
+    .score-chip {
+      background: var(--gradient-1);
+      color: white;
+      padding: 2px 10px;
+      border-radius: 100px;
+      font-size: 0.75rem;
       font-weight: 700;
-      flex-shrink: 0;
     }
 
-    .score-badge.negative {
-      background: linear-gradient(135deg, #ff6b9d, #ff4757);
-    }
-
-    .score-badge.neutral {
-      background: linear-gradient(135deg, #ffa502, #ff6348);
-    }
-
-    .toggle-icon {
-      color: var(--muted);
-      font-size: .85rem;
-      flex-shrink: 0;
-      transition: transform var(--transition);
-    }
-
-    .card.open .toggle-icon {
-      transform: rotate(180deg);
-    }
-
-    .card-body {
-      padding: 0 1.25rem;
+    .card-content {
+      padding: 0 20px;
       max-height: 0;
       overflow: hidden;
-      transition: max-height .35s cubic-bezier(.4, 0, .2, 1), padding var(--transition);
-      color: var(--muted);
-      line-height: 1.8;
-      white-space: pre-wrap;
-      font-size: .9rem;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
     }
 
-    .card.open .card-body {
-      max-height: 2000px;
-      padding: 0 1.25rem 1.25rem;
+    .section-card.open .card-content {
+      max-height: 1000px;
+      padding: 0 20px 20px;
     }
 
-    /* ── Key Findings ── */
     .findings-list {
       list-style: none;
     }
 
-    .findings-list li {
+    .finding-item {
       display: flex;
-      align-items: flex-start;
-      gap: .75rem;
-      padding: .75rem 0;
-      border-bottom: 1px solid var(--border);
-      color: var(--muted);
-      font-size: .9rem;
-      line-height: 1.7;
+      gap: 12px;
+      padding: 12px 15px;
+      background: rgba(129, 140, 248, 0.05);
+      border-radius: 14px;
+      margin-bottom: 10px;
+      border-left: 3px solid var(--secondary);
+      font-size: 0.9rem;
     }
 
-    .findings-list li:last-child {
-      border-bottom: none;
-    }
-
-    .findings-list li::before {
-      content: "→";
-      color: var(--accent2);
-      font-weight: 800;
-      flex-shrink: 0;
-      margin-top: .05rem;
-    }
-
-    /* ── Stats Row ── */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: .75rem;
-      margin-bottom: 2rem;
-    }
-
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 1rem 1.25rem;
-      text-align: center;
-    }
-
-    .stat-value {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--accent2);
-    }
-
-    .stat-label {
-      font-size: .75rem;
-      color: var(--muted);
-      margin-top: .2rem;
-    }
-
-    /* ── Footer ── */
     footer {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: .78rem;
       text-align: center;
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    /* ── Tooltip ── */
-    [data-tooltip] {
-      position: relative;
-      cursor: help;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    [data-tooltip]::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: .5rem .75rem;
-      font-size: .78rem;
-      color: var(--text);
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity var(--transition);
-      z-index: 100;
-      max-width: 260px;
-      white-space: normal;
-      text-align: left;
-    }
-
-    [data-tooltip]:hover::after {
-      opacity: 1;
-    }
-
-    /* ── Responsive ── */
     @media (max-width: 600px) {
-      body {
-        padding: 1.25rem 1rem;
+      .glass {
+        padding: 25px;
       }
 
-      .header h1 {
-        font-size: 1.5rem;
+      header h1 {
+        font-size: 2rem;
       }
 
-      .stats-row {
-        grid-template-columns: repeat(2, 1fr);
+      .grid-sections {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -352,165 +258,111 @@
 
 <body>
   <div class="container">
+    <div class="glass" id="app">
+      <header>
+        <h1 id="title">Analytics Dashboard</h1>
+        <div class="meta-badges" id="badges"></div>
+      </header>
 
-    <!-- Header -->
-    <div class="header">
-      <h1 id="scorecard-title">📊 Conversation Scorecard</h1>
-      <div class="meta-row" id="meta-row">
-        <!-- Populated by JS -->
+      <div class="hero-stats" id="hero-stats"></div>
+
+      <div class="summary-box">
+        <p id="summary">Analyzing conversation data...</p>
       </div>
+
+      <div class="grid-sections">
+        <div class="col">
+          <h2 id="sections-label">🔍 Analysis Sections</h2>
+          <div id="sections-container"></div>
+        </div>
+        <div class="col">
+          <h2>💡 Key Findings</h2>
+          <div id="findings-container" class="findings-list"></div>
+        </div>
+      </div>
+
+      <footer id="footer">
+        Generated by Conversation Analyser
+      </footer>
     </div>
-
-    <!-- Stats Row -->
-    <div class="stats-row" id="stats-row"></div>
-
-    <!-- Summary -->
-    <div class="summary-box">
-      <p id="summary-text">Loading…</p>
-    </div>
-
-    <!-- Sections -->
-    <div id="sections-container"></div>
-
-    <!-- Key Findings -->
-    <div id="findings-container"></div>
-
-    <footer>
-      Generated by <strong>Conversation Analyser MCP Server</strong>
-      &nbsp;·&nbsp; <span id="footer-model"></span>
-    </footer>
   </div>
 
-  <!-- INJECT: data_json -->
   <script id="scorecard-data" type="application/json">null</script>
 
   <script>
-    // ── Embedded data (read from data element) ──
     const DATA = JSON.parse(document.getElementById('scorecard-data').textContent);
 
-    // ── Helpers ──
-    function el(tag, cls, html) {
-      const e = document.createElement(tag);
-      if (cls) e.className = cls;
-      if (html !== undefined) e.innerHTML = html;
-      return e;
-    }
+    if (DATA) {
+      // Title & Badges
+      document.getElementById('title').textContent = (DATA.work_type || 'Conversation').replace(/_/g, ' ') + ' Analysis';
 
-    function scoreClass(score) {
-      if (score === null || score === undefined) return '';
-      if (DATA.analysis_type === 'benchmark') return 'accent'; // Benchmark scores are always positive metrics
-      if (score < -0.2) return 'negative';
-      if (score < 0.2) return 'neutral';
-      return '';
-    }
+      const badgeList = [DATA.analysis_type, DATA.model_used, DATA.source_format].filter(Boolean);
+      document.getElementById('badges').innerHTML = badgeList.map(b => `<span class="badge">${b}</span>`).join('');
 
-    function scoreLabel(score) {
-      if (score === null || score === undefined) return null;
-      if (DATA.analysis_type === 'benchmark') return `${score}h`; // Hours for benchmark
-      const pct = Math.round(((score + 1) / 2) * 100);
-      return `${pct}%`;
-    }
+      // Hero Stats
+      const statItems = [
+        { label: 'Turns', val: DATA.turn_count },
+        { label: 'Chunks', val: DATA.chunk_count },
+      ];
+      if (DATA.total_manual_time) {
+        statItems.push({ label: 'Manual Hours', val: DATA.total_manual_time });
+      } else {
+        statItems.push({ label: 'Analysis', val: DATA.analysis_type });
+      }
+      document.getElementById('hero-stats').innerHTML = statItems.map(s => `
+        <div class="h-stat">
+          <span class="h-stat-val">${s.val || '—'}</span>
+          <span class="h-stat-label">${s.label}</span>
+        </div>
+      `).join('');
 
-    // ── Render title ──
-    document.title = `Scorecard — ${DATA.work_type} / ${DATA.analysis_type}`;
-    document.getElementById('scorecard-title').textContent =
-      `📊 ${DATA.work_type.replace(/_/g, ' ')} Scorecard`;
+      // Summary
+      document.getElementById('summary').textContent = DATA.summary;
 
-    // ── Render meta badges ──
-    const metaRow = document.getElementById('meta-row');
-    const badges = [
-      { label: DATA.work_type.replace(/_/g, ' '), cls: 'accent' },
-      { label: DATA.analysis_type.replace(/_/g, ' '), cls: 'accent2' },
-      { label: DATA.model_used || 'unknown model', cls: 'accent3' },
-    ];
-    badges.forEach(b => {
-      const badge = el('span', `badge ${b.cls}`);
-      badge.innerHTML = `<span class="dot"></span>${b.label}`;
-      metaRow.appendChild(badge);
-    });
+      // Sections (Accordion)
+      const sectionsLabel = DATA.analysis_type === 'benchmark' ? '🏢 Work Categories' : '🔍 Analysis Sections';
+      document.getElementById('sections-label').innerHTML = sectionsLabel;
 
-    // ── Render stats ──
-    const statsRow = document.getElementById('stats-row');
-    const stats = [
-      { value: DATA.turn_count ?? '—', label: 'Turns' },
-      { value: DATA.chunk_count ?? 1, label: 'Chunks analysed' },
-    ];
-
-    if (DATA.total_manual_time !== undefined) {
-      stats.push({ value: DATA.total_manual_time, label: 'Total Manual Time Saved' });
-    } else {
-      stats.push({ value: DATA.source_format ?? '—', label: 'Format' });
-    }
-
-    stats.forEach(s => {
-      const card = el('div', 'stat-card');
-      card.innerHTML = `<div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div>`;
-      statsRow.appendChild(card);
-    });
-
-    // ── Render summary ──
-    document.getElementById('summary-text').textContent = DATA.summary || 'No summary available.';
-
-    // ── Render sections ──
-    const sectionsContainer = document.getElementById('sections-container');
-    const sections = DATA.sections || [];
-    if (sections.length > 0) {
-      const title = el('p', 'section-title', DATA.analysis_type === 'benchmark' ? 'Work Categories' : 'Analysis Sections');
-      sectionsContainer.appendChild(title);
-
-      sections.forEach((sec, i) => {
-        const card = el('div', 'card');
-        const score = sec.score !== undefined ? sec.score : null;
-        const scoreBadge = score !== null
-          ? `<span class="score-badge ${scoreClass(score)}"
-           data-tooltip="${DATA.analysis_type === 'benchmark' ? 'Estimated manual hours' : 'Sentiment score'}: ${score.toFixed(2)}">${scoreLabel(score)}</span>`
+      const sectionsContainer = document.getElementById('sections-container');
+      (DATA.sections || []).forEach((sec, idx) => {
+        const card = document.createElement('div');
+        card.className = 'section-card';
+        const scoreHtml = (sec.score !== undefined && sec.score !== null)
+          ? `<span class="score-chip">${DATA.analysis_type === 'benchmark' ? sec.score + 'h' : Math.round(sec.score * 100) + '%'}</span>`
           : '';
-        const icons = ['💬', '📋', '🎯', '📈', '⚡', '🔍', '💡', '🤝'];
-        const icon = icons[i % icons.length];
 
         card.innerHTML = `
-      <div class="card-header" role="button" tabindex="0"
-           aria-expanded="false" aria-controls="card-body-${i}">
-        <span class="card-icon">${icon}</span>
-        <span class="card-title">${sec.title || 'Section'}</span>
-        ${scoreBadge}
-        <span class="toggle-icon">▼</span>
-      </div>
-      <div class="card-body" id="card-body-${i}">${sec.content || ''}</div>
-    `;
+          <div class="card-header">
+            <span class="card-title">${sec.title}</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              ${scoreHtml}
+              <span class="arrow">▼</span>
+            </div>
+          </div>
+          <div class="card-content">
+            ${sec.content}
+          </div>
+        `;
 
-        const header = card.querySelector('.card-header');
-        const toggle = () => {
-          const open = card.classList.toggle('open');
-          header.setAttribute('aria-expanded', open);
+        card.querySelector('.card-header').onclick = () => {
+          card.classList.toggle('open');
+          card.querySelector('.arrow').style.transform = card.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
         };
-        header.addEventListener('click', toggle);
-        header.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
-        });
 
         sectionsContainer.appendChild(card);
       });
-    }
 
-    // ── Render key findings ──
-    const findingsContainer = document.getElementById('findings-container');
-    const findings = DATA.key_findings || [];
-    if (findings.length > 0) {
-      findingsContainer.appendChild(el('p', 'section-title', 'Key Findings'));
-      const list = el('ul', 'findings-list');
-      findings.forEach(f => {
-        const li = el('li', '', f);
-        list.appendChild(li);
+      // Findings
+      const findingsContainer = document.getElementById('findings-container');
+      (DATA.key_findings || []).forEach(f => {
+        const item = document.createElement('div');
+        item.className = 'finding-item';
+        item.innerHTML = `<span>⚡</span><span>${f}</span>`;
+        findingsContainer.appendChild(item);
       });
-      findingsContainer.appendChild(list);
+
+      document.getElementById('footer').textContent = `Generated by Conversation Analyser MCP • ${new Date().toLocaleDateString()}`;
     }
-
-    // ── Footer ──
-    document.getElementById('footer-model').textContent = `Model: ${DATA.model_used || 'unknown'}`;
-
-    // ── Expose data for programmatic access ──
-    window.__scorecardData = DATA;
   </script>
 </body>
 
