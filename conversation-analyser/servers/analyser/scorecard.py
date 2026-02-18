@@ -66,8 +66,14 @@ def _minimal_scorecard(payload: dict[str, Any], data_json: str) -> str:
     for sec in sections:
         title = html.escape(str(sec.get("title", "")))
         content = html.escape(str(sec.get("content", "")))
-        score = sec.get("score")
-        score_badge = f'<span class="score">{score}</span>' if score is not None else ""
+        if sec.get("manual_time") and sec.get("agentic_time"):
+            score_badge = f'<span class="score">-{sec.get("savings")}h</span>'
+        else:
+            score = sec.get("score")
+            score_badge = (
+                f'<span class="score">{score}</span>' if score is not None else ""
+            )
+
         sections_html += f"""
         <div class="card">
           <div class="card-title">{title} {score_badge}</div>

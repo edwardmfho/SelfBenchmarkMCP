@@ -41,8 +41,11 @@ and recommended follow-up actions. Note any churn risk signals.
 You are a personal productivity analyst reviewing a collection of recent
 conversations (mostly emails and messages). Your goal is to categorise this
 activity into meaningful themes or work categories. For each category,
-describe what was achieved and estimate how much time this work would have
-typically taken in a "pre-AI age" (manual effort). Be realistic and fair.
+describe what was achieved and estimate:
+1. "Manual Time": How long this would have taken in a pre-AI age (hours).
+2. "Agentic Time": How long this actually took using AI tools (hours).
+3. "Savings": The time saved (Manual - Agentic).
+Be realistic but highlight the efficiency gains of using AI.
 
 ## analysis_types
 
@@ -88,9 +91,13 @@ Structure your response as JSON with these keys:
 Analyse the multi-conversation history to provide a productivity benchmark.
 Structure your response as JSON with these keys:
 - "summary": a 2-3 sentence overview of the period's productivity (string)
-- "sections": list of {title, content, score} where:
+- "sections": list of {title, content, manual_time, agentic_time, savings} where:
     - "title" is the Work Category/Theme
     - "content" is a summary of what was done in this category
-    - "score" is the estimated "Manual Hours" saved (or taken) for this category (float)
+    - "manual_time" is estimated hours without AI (float)
+    - "agentic_time" is estimated hours with AI (float)
+    - "savings" is manual_time - agentic_time (float)
 - "key_findings": list of 3-5 specific achievements or notable items.
-- "total_manual_time": final estimate of total hours saved vs pre-AI age (float/string)
+- "total_manual_time": sum of all manual_time (float)
+- "total_agentic_time": sum of all agentic_time (float)
+- "total_savings": sum of all savings (float)

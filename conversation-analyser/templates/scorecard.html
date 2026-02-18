@@ -16,6 +16,7 @@
       --primary: #38bdf8;
       --secondary: #818cf8;
       --accent: #f472b6;
+      --success: #34d399;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --gradient-1: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
@@ -114,11 +115,82 @@
       color: var(--primary);
     }
 
+    .text-success {
+      color: var(--success);
+    }
+
+    .text-accent {
+      color: var(--accent);
+    }
+
     .h-stat-label {
       font-size: 0.75rem;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 1px;
+    }
+
+    /* Comparison Bar Chart */
+    .comparison-chart {
+      margin-bottom: 40px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .chart-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .bar-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 12px;
+    }
+
+    .bar-label {
+      width: 100px;
+      text-align: right;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+      min-width: 40px;
+      transition: width 1s ease-out;
+    }
+
+    .bar-manual {
+      background: var(--secondary);
+    }
+
+    .bar-agentic {
+      background: var(--success);
     }
 
     .summary-box {
@@ -201,6 +273,17 @@
       padding: 0 20px 20px;
     }
 
+    .time-breakdown {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
     .findings-list {
       list-style: none;
     }
@@ -266,6 +349,8 @@
 
       <div class="hero-stats" id="hero-stats"></div>
 
+      <div id="comparison-container"></div>
+
       <div class="summary-box">
         <p id="summary">Analyzing conversation data...</p>
       </div>
@@ -300,21 +385,55 @@
       document.getElementById('badges').innerHTML = badgeList.map(b => `<span class="badge">${b}</span>`).join('');
 
       // Hero Stats
-      const statItems = [
-        { label: 'Turns', val: DATA.turn_count },
-        { label: 'Chunks', val: DATA.chunk_count },
-      ];
-      if (DATA.total_manual_time) {
-        statItems.push({ label: 'Manual Hours', val: DATA.total_manual_time });
+      const statItems = [];
+
+      if (DATA.total_manual_time && DATA.total_agentic_time) {
+        // If we have specific benchmark data
+        statItems.push({ label: 'Manual Time', val: DATA.total_manual_time + 'h' });
+        statItems.push({ label: 'Agentic Time', val: DATA.total_agentic_time + 'h', class: 'text-success' });
+        const saved = (DATA.total_savings || (DATA.total_manual_time - DATA.total_agentic_time)).toFixed(1);
+        statItems.push({ label: 'Time Saved', val: saved + 'h', class: 'text-accent' });
       } else {
-        statItems.push({ label: 'Analysis', val: DATA.analysis_type });
+        // Generic fallback
+        statItems.push({ label: 'Turns', val: DATA.turn_count });
+        statItems.push({ label: 'Chunks', val: DATA.chunk_count });
+        statItems.push({ label: 'Type', val: DATA.analysis_type });
       }
+
       document.getElementById('hero-stats').innerHTML = statItems.map(s => `
         <div class="h-stat">
-          <span class="h-stat-val">${s.val || '—'}</span>
+          <span class="h-stat-val ${s.class || ''}">${s.val || '—'}</span>
           <span class="h-stat-label">${s.label}</span>
         </div>
       `).join('');
+
+      // Visual Comparison (only for benchmark)
+      if (DATA.total_manual_time && DATA.total_agentic_time) {
+        const manual = parseFloat(DATA.total_manual_time);
+        const agentic = parseFloat(DATA.total_agentic_time);
+        const max = Math.max(manual, agentic) * 1.1; // 10% buffering
+
+        const manualPct = (manual / max) * 100;
+        const agenticPct = (agentic / max) * 100;
+
+        document.getElementById('comparison-container').innerHTML = `
+            <div class="comparison-chart">
+                <div class="chart-title">Manual vs Agentic Workflow Efficiency</div>
+                <div class="bar-container">
+                    <div class="bar-label">Manual</div>
+                    <div class="bar-track">
+                        <div class="bar-fill bar-manual" style="width: ${manualPct}%">${manual}h</div>
+                    </div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-label">Agentic (AI)</div>
+                    <div class="bar-track">
+                        <div class="bar-fill bar-agentic" style="width: ${agenticPct}%">${agentic}h</div>
+                    </div>
+                </div>
+            </div>
+          `;
+      }
 
       // Summary
       document.getElementById('summary').textContent = DATA.summary;
@@ -327,9 +446,23 @@
       (DATA.sections || []).forEach((sec, idx) => {
         const card = document.createElement('div');
         card.className = 'section-card';
-        const scoreHtml = (sec.score !== undefined && sec.score !== null)
-          ? `<span class="score-chip">${DATA.analysis_type === 'benchmark' ? sec.score + 'h' : Math.round(sec.score * 100) + '%'}</span>`
-          : '';
+
+        let scoreHtml = '';
+        if (sec.savings) {
+          scoreHtml = `<span class="score-chip" style="background:var(--success)">-${sec.savings}h</span>`;
+        } else if (sec.score !== undefined && sec.score !== null) {
+          scoreHtml = `<span class="score-chip">${DATA.analysis_type === 'benchmark' ? sec.score + 'h' : Math.round(sec.score * 100) + '%'}</span>`;
+        }
+
+        let extraContent = '';
+        if (sec.manual_time && sec.agentic_time) {
+          extraContent = `
+                <div class="time-breakdown">
+                    <span>⏳ Manual: ${sec.manual_time}h</span>
+                    <span>🤖 Agentic: ${sec.agentic_time}h</span>
+                </div>
+            `;
+        }
 
         card.innerHTML = `
           <div class="card-header">
@@ -341,6 +474,7 @@
           </div>
           <div class="card-content">
             ${sec.content}
+            ${extraContent}
           </div>
         `;
 
