@@ -89,6 +89,8 @@ Structure your response as JSON with these keys:
 
 ### benchmark
 Analyse the multi-conversation history to provide a productivity benchmark.
+Context: You are assessing the work of a high-level executive. When estimating "Manual Time", assume the standard of work required for a Senior Executive / Entrepreneur (high quality, thorough, but potentially time-consuming).
+
 Structure your response as JSON with these keys:
 - "summary": a 2-3 sentence overview of the period's productivity (string)
 - "sections": list of {title, content, manual_time, agentic_time, savings} where:
@@ -101,8 +103,12 @@ Structure your response as JSON with these keys:
     - "description": Description of work (e.g. "Built pitch deck")
     - "manual_duration": string (e.g. "3 days")
     - "ai_duration": string (e.g. "0.5 days")
+    - "manual_hours": float (numeric hours for charting, e.g. 24.0)
+    - "ai_hours": float (numeric hours for charting, e.g. 4.0)
     - "impact_summary": One line narrative (e.g. "Automating data collection saved 2.5 days")
 - "key_findings": list of 3-5 specific achievements or notable items.
 - "total_manual_time": sum of all manual_time (float)
 - "total_agentic_time": sum of all agentic_time (float)
 - "total_savings": sum of all savings (float)
+- "force_multiplier": (total_manual_time / total_agentic_time) formatted as a float (e.g. 12.5)
+- "employee_equivalent": (total_manual_time / 40) formatted as a float (e.g. 3.5), representing how many full-time employees would be needed to do this work manually in one week.

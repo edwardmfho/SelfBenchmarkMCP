@@ -17,6 +17,7 @@
       --text-muted: #595959;
       --accent-red: #C53030;
       --accent-gold: #D69E2E;
+      --accent-blue: #2B6CB0;
       --border-heavy: 2px solid #1a1a1a;
       --border-light: 1px solid #e5e5e5;
       --font-serif: 'Playfair Display', serif;
@@ -44,7 +45,7 @@
       position: relative;
     }
 
-    /* HEADER / MASTHEAD */
+    /* HEADER */
     header {
       text-align: center;
       border-bottom: var(--border-heavy);
@@ -90,32 +91,25 @@
       color: var(--text-muted);
     }
 
-    /* HERO STATS - "The Ticker" */
+    /* HERO STATS - "The Multiplier" */
     .hero-ticker {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       border-bottom: var(--border-light);
       padding-bottom: 30px;
       margin-bottom: 40px;
+      gap: 20px;
+      /* Added gap for better spacing */
     }
 
     .ticker-item {
       text-align: center;
-      padding: 0 20px;
+      padding: 0 10px;
       border-right: var(--border-light);
     }
 
     .ticker-item:last-child {
       border-right: none;
-    }
-
-    .ticker-val {
-      font-family: var(--font-serif);
-      font-size: 3.5rem;
-      font-weight: 700;
-      display: block;
-      line-height: 1;
-      margin-bottom: 5px;
     }
 
     .ticker-label {
@@ -124,9 +118,26 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--text-muted);
+      margin-bottom: 5px;
+      display: block;
     }
 
-    /* IMPACT STORIES - "The Lead Stories" */
+    .ticker-val {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      font-weight: 700;
+      display: block;
+      line-height: 1.1;
+    }
+
+    .ticker-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 5px;
+      font-style: italic;
+    }
+
+    /* IMPACT STORIES & CHARTS */
     .section-header {
       font-family: var(--font-sans);
       font-size: 0.85rem;
@@ -142,60 +153,137 @@
     .story-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 30px;
-      margin-bottom: 50px;
+      gap: 40px;
+      margin-bottom: 60px;
     }
 
     .story-card {
-      padding: 25px;
-      background: #fff;
-      border: 1px solid #e5e5e5;
-      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
-      transition: transform 0.2s ease;
-    }
-
-    .story-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.05);
+      padding: 0;
+      background: transparent;
     }
 
     .story-title {
       font-family: var(--font-serif);
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
       color: var(--text-ink);
-    }
-
-    .story-comparison {
-      display: flex;
-      align-items: baseline;
-      gap: 15px;
-      margin-bottom: 15px;
-      font-family: var(--font-sans);
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      border-bottom: 1px solid #f0f0f0;
-      padding-bottom: 15px;
-    }
-
-    .comp-segment strong {
-      color: var(--text-ink);
-      font-weight: 600;
-    }
-
-    .arrow-sep {
-      color: #ccc;
     }
 
     .story-narrative {
       font-family: var(--font-serif);
       font-style: italic;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    /* CHART STYLES */
+    .chart-container {
+      margin-top: 15px;
+      background: #f0f0f0;
+      height: 40px;
+      width: 100%;
+      position: relative;
+      border-radius: 4px;
+      /* Slight rounded corners */
+      overflow: hidden;
+      display: flex;
+    }
+
+    .bar-manual {
+      background-color: #cbd5e0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      color: #4a5568;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: width 1s ease-in-out;
+    }
+
+    .bar-agentic {
+      background-color: var(--accent-gold);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: width 1s ease-in-out;
+      position: absolute;
+      /* Overlay if needed, or flex */
+      top: 0;
+      left: 0;
+      z-index: 2;
+      /* We'll use a specific visual trick: A vs B bars separately might be clearer 
+                BUT user asked for "how many time I have saved... as opposed to without AI" 
+                A stacked bar where Total = Manual, and a subset is Agentic visualizes the saving well?
+                Actually, simpler: Two bars. */
+    }
+
+    /* Standard Bar Chart (Manual vs Agentic) */
+    .comparison-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 100px 1fr 60px;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .bar-label {
+      text-align: right;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .bar-track {
+      background: #eee;
+      height: 24px;
+      width: 100%;
+      position: relative;
+      border-radius: 3px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      min-width: 2px;
+    }
+
+    .fill-manual {
+      background-color: #A0AEC0;
+    }
+
+    .fill-agentic {
+      background-color: var(--accent-gold);
+    }
+
+    .fill-saved {
+      background-color: var(--accent-blue);
+      opacity: 0.2;
+    }
+
+    /* Visual gap */
+
+    .bar-value {
+      font-weight: 600;
       color: var(--text-ink);
     }
 
-    /* SUMMARY & FINDINGS - "Editorial & Briefs" */
+
+    /* SUMMARY & LEDGER */
     .layout-cols {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -207,8 +295,6 @@
       border-right: var(--border-light);
     }
 
-
-
     .editorial-text {
       font-family: var(--font-serif);
       font-size: 1.1rem;
@@ -217,27 +303,16 @@
     }
 
     .bullet-list {
-      list-style: none;
-      padding: 0;
+      margin-bottom: 20px;
+      padding-left: 20px;
     }
 
     .bullet-item {
-      margin-bottom: 15px;
-      padding-left: 20px;
-      position: relative;
+      margin-bottom: 10px;
       font-size: 0.95rem;
       color: var(--text-muted);
     }
 
-    .bullet-item::before {
-      content: "•";
-      position: absolute;
-      left: 0;
-      color: var(--accent-red);
-      font-weight: bold;
-    }
-
-    /* CATEGORY TABLE - "The Ledger" */
     .ledger-table {
       width: 100%;
       border-collapse: collapse;
@@ -295,7 +370,7 @@
 
       .hero-ticker {
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 30px;
       }
 
       .ticker-item {
@@ -329,7 +404,7 @@
         <span>Vol. <span id="vol-num">1</span></span>
       </div>
       <h1>Inbox Intelligence</h1>
-      <div class="sub-masthead">An Efficiency Report on Your Recent Digital Activity</div>
+      <div class="sub-masthead">Productivity Benchmark & Force Multiplier Report</div>
     </header>
 
     <!-- HERO TICKER -->
@@ -337,9 +412,9 @@
       <!-- Injected via JS -->
     </div>
 
-    <!-- IMPACT STORIES -->
+    <!-- IMPACT STORIES (Charts) -->
     <div id="stories-section" style="display:none;">
-      <div class="section-header">The Efficiency Log</div>
+      <div class="section-header">Operational Wins</div>
       <div class="story-grid" id="story-grid">
         <!-- Stories injected here -->
       </div>
@@ -349,7 +424,7 @@
     <div class="layout-cols">
       <!-- LEFT: Summary & Ledger -->
       <div class="editorial-col">
-        <div class="section-header">Executive Brief</div>
+        <div class="section-header">Executive Summary</div>
         <div class="editorial-text" id="summary-text">
           <!-- Summary injected here -->
         </div>
@@ -361,8 +436,8 @@
               <tr>
                 <th>Category</th>
                 <th>Activity</th>
-                <th class="ledger-num">Pre-AI</th>
-                <th class="ledger-num">With AI</th>
+                <th class="ledger-num">Manual</th>
+                <th class="ledger-num">Agentic</th>
                 <th class="ledger-num">Saved</th>
               </tr>
             </thead>
@@ -397,83 +472,108 @@
       return new Date().toLocaleDateString('en-US', options);
     }
     document.getElementById('date-display').textContent = formatDate();
-    document.getElementById('vol-num').textContent = Math.floor(Math.random() * 100) + 1; // Simulation
+    document.getElementById('vol-num').textContent = Math.floor(Math.random() * 100) + 1;
 
     if (DATA) {
-      // 1. HERO TICKER
+      // 1. HERO TICKER (Force Multiplier Focus)
       const tickerEl = document.getElementById('hero-ticker');
       let tickerHtml = '';
 
       if (DATA.total_manual_time && DATA.total_agentic_time) {
         // Benchmark Mode
+        const multiplier = DATA.force_multiplier || (DATA.total_manual_time / DATA.total_agentic_time).toFixed(1);
+        const employees = DATA.employee_equivalent || (DATA.total_manual_time / 40).toFixed(1);
         const saved = DATA.total_savings || (DATA.total_manual_time - DATA.total_agentic_time);
+
         tickerHtml = `
                     <div class="ticker-item">
-                        <span class="ticker-val">${DATA.total_manual_time}h</span>
-                        <span class="ticker-label">Manual Effort</span>
+                        <span class="ticker-label">Force Multiplier</span>
+                        <span class="ticker-val" style="color: var(--text-ink);">${multiplier}x</span>
+                        <div class="ticker-sub">Output achieved vs manual effort</div>
                     </div>
                     <div class="ticker-item">
-                        <span class="ticker-val" style="color: var(--accent-gold);">${DATA.total_agentic_time}h</span>
-                        <span class="ticker-label">Agentic Effort</span>
+                        <span class="ticker-label">Virtual Workforce</span>
+                        <span class="ticker-val" style="color: var(--accent-gold);">${employees} FTE</span>
+                        <div class="ticker-sub">Full-time employee equivalent output</div>
                     </div>
                     <div class="ticker-item">
-                        <span class="ticker-val" style="color: var(--accent-red);">${saved.toFixed(1)}h</span>
                         <span class="ticker-label">Time Reclaimed</span>
+                        <span class="ticker-val" style="color: var(--accent-red);">${saved.toFixed(1)}h</span>
+                         <div class="ticker-sub">Hours saved this period</div>
                     </div>
                 `;
       } else {
-        // Standard Mode
+        // Standard Mode Fallback
         tickerHtml = `
                     <div class="ticker-item">
-                        <span class="ticker-val">${DATA.turn_count || 0}</span>
                         <span class="ticker-label">Total Turns</span>
+                        <span class="ticker-val">${DATA.turn_count || 0}</span>
                     </div>
                     <div class="ticker-item">
+                         <span class="ticker-label">Analysis Chunks</span>
                         <span class="ticker-val">${DATA.chunk_count || 1}</span>
-                        <span class="ticker-label">Analysis Chunks</span>
                     </div>
                      <div class="ticker-item">
-                        <span class="ticker-val" style="font-size: 2rem;">${(DATA.analysis_type || 'General').substring(0, 10)}</span>
                         <span class="ticker-label">Focus Area</span>
+                        <span class="ticker-val" style="font-size: 2rem;">${(DATA.analysis_type || 'General').substring(0, 10)}</span>
                     </div>
                 `;
       }
       tickerEl.innerHTML = tickerHtml;
 
-      // 2. IMPACT STORIES (If available)
+      // 2. IMPACT STORIES (Charts)
       if (DATA.impact_stories && DATA.impact_stories.length > 0) {
         document.getElementById('stories-section').style.display = 'block';
         const gridEl = document.getElementById('story-grid');
-        gridEl.innerHTML = DATA.impact_stories.map(story => `
+
+        gridEl.innerHTML = DATA.impact_stories.map(story => {
+          // Calculate percentages for bars
+          const manual = parseFloat(story.manual_hours || 0);
+          const ai = parseFloat(story.ai_hours || 0);
+
+          // Sanity check
+          if (!manual) return '';
+
+          const max = Math.max(manual, ai) * 1.05; // 5% buffer
+          const manualPct = (manual / max) * 100;
+          const aiPct = (ai / max) * 100;
+
+          return `
                     <div class="story-card">
                         <div class="story-title">${story.description}</div>
-                        <div class="story-comparison">
-                            <span class="comp-segment">Traditional: <strong>${story.manual_duration}</strong></span>
-                            <span class="arrow-sep">→</span>
-                            <span class="comp-segment">Agentic: <strong>${story.ai_duration}</strong></span>
-                        </div>
                         <div class="story-narrative">"${story.impact_summary}"</div>
+                        <div class="comparison-bars">
+                            <div class="bar-row">
+                                <span class="bar-label">Manual</span>
+                                <div class="bar-track">
+                                    <div class="bar-fill fill-manual" style="width: ${manualPct}%"></div>
+                                </div>
+                                <span class="bar-value">${story.manual_duration}</span>
+                            </div>
+                            <div class="bar-row">
+                                <span class="bar-label" style="color: var(--accent-gold)">Agentic</span>
+                                <div class="bar-track">
+                                    <div class="bar-fill fill-agentic" style="width: ${aiPct}%"></div>
+                                </div>
+                                <span class="bar-value" style="color: var(--accent-gold)">${story.ai_duration}</span>
+                            </div>
+                        </div>
                     </div>
-                `).join('');
+                `}).join('');
       }
 
       // 3. EXECUTIVE BRIEF (Summary)
       document.getElementById('summary-text').textContent = DATA.summary;
 
-      // 4. ACTIVITY LEDGER (Sections)
+      // 4. ACTIVITY LEDGER
       const ledgerBody = document.getElementById('ledger-body');
       (DATA.sections || []).forEach(sec => {
         const tr = document.createElement('tr');
-
-        // Content truncation
-        const contentShort = sec.content.length > 60 ? sec.content.substring(0, 60) + '...' : sec.content;
-
-        // Savings badge
+        const contentShort = sec.content.length > 50 ? sec.content.substring(0, 50) + '...' : sec.content;
         let savedCell = '—';
         if (sec.savings) {
           savedCell = `<span class="savings-tag">-${sec.savings}h</span>`;
         }
-
         tr.innerHTML = `
                     <td><strong>${sec.title}</strong></td>
                     <td style="color: var(--text-muted);">${contentShort}</td>

@@ -68,6 +68,24 @@ def _minimal_scorecard(payload: dict[str, Any], data_json: str) -> str:
     analysis_type = html.escape(str(payload.get("analysis_type", "")))
     model = html.escape(str(payload.get("model_used", "")))
 
+    # New metrics
+    multiplier = payload.get("force_multiplier")
+    employees = payload.get("employee_equivalent")
+    metrics_html = ""
+    if multiplier and employees:
+        metrics_html = f"""
+        <div class="summary" style="display: flex; gap: 20px; justify-content: space-around; text-align: center;">
+            <div>
+                <div style="font-size: 2rem; font-weight: bold; color: #fbbf24;">{multiplier}x</div>
+                <div style="font-size: 0.8rem; text-transform: uppercase;">Force Multiplier</div>
+            </div>
+            <div>
+                 <div style="font-size: 2rem; font-weight: bold; color: #34d399;">{employees}</div>
+                <div style="font-size: 0.8rem; text-transform: uppercase;">Virtual Employees</div>
+            </div>
+        </div>
+        """
+
     sections_html = ""
     for sec in sections:
         title = html.escape(str(sec.get("title", "")))
@@ -126,6 +144,7 @@ def _minimal_scorecard(payload: dict[str, Any], data_json: str) -> str:
   <h1>📊 {work_type.title()} Scorecard</h1>
   <p>Analysis Type: {analysis_type} | Model: {model}</p>
   <div class="summary">{summary}</div>
+  {metrics_html}
   <h2>Sections</h2>
   {sections_html}
   <h2>Key Findings</h2>

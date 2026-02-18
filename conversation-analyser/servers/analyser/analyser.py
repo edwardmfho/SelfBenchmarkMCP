@@ -368,6 +368,8 @@ async def analyse(
         scorecard_html=scorecard_html,
         chunk_results=partial_results if total_chunks > 1 else [],
         impact_stories=synthesis_data.get("impact_stories", []),
+        force_multiplier=synthesis_data.get("force_multiplier"),
+        employee_equivalent=synthesis_data.get("employee_equivalent"),
         model_used=model_used,
         stop_reason=stop_reason,
     )

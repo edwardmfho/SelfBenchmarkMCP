@@ -84,6 +84,12 @@ class AnalysisResult(BaseModel):
         default_factory=list,
         description="Specific narrative examples of time savings (for benchmark)",
     )
+    force_multiplier: float | None = Field(
+        default=None, description="Ratio of Manual Time / Agentic Time"
+    )
+    employee_equivalent: float | None = Field(
+        default=None, description="Manual hours / 40h work week"
+    )
     model_used: str = Field(description="Model name used for the final synthesis")
     stop_reason: str | None = Field(default=None)
 
