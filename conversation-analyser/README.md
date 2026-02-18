@@ -14,13 +14,16 @@ Two MCP servers that analyse conversations using **MCP Sampling** — the LLM ru
 ### 1. Install
 
 **Option A: Run without installing (Recommended)**
-You can run the servers directly using `uvx` without manual installation:
+You can run the servers directly using `uvx`. Note the trailing command name:
+
 ```bash
 # Analyser
-uvx --from git+https://github.com/edwardmfho/SelfBenchmarkMCP.git#subdirectory=conversation-analyser conversation-analyser
+uvx --quiet --from git+https://github.com/edwardmfho/SelfBenchmarkMCP.git#subdirectory=conversation-analyser \
+  conversation-analyser
 
-# Gmail Fetcher
-uvx --from git+https://github.com/edwardmfho/SelfBenchmarkMCP.git#subdirectory=conversation-analyser gmail-fetcher
+# Gmail Fetcher (includes required [gmail] dependencies)
+uvx --quiet --from "conversation-analyser-mcp[gmail] @ git+https://github.com/edwardmfho/SelfBenchmarkMCP.git#subdirectory=conversation-analyser" \
+  gmail-fetcher
 ```
 
 **Option B: Local Development Install**
@@ -40,6 +43,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
     "conversation-analyser": {
       "command": "uvx",
       "args": [
+        "--quiet",
         "--from",
         "git+https://github.com/edwardmfho/SelfBenchmarkMCP.git#subdirectory=conversation-analyser",
         "conversation-analyser"
@@ -48,8 +52,9 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
     "gmail-fetcher": {
       "command": "uvx",
       "args": [
+        "--quiet",
         "--from",
-        "git+https://github.com/edwardmfho/SelfBenchmarkMCP.git#subdirectory=conversation-analyser",
+        "conversation-analyser-mcp[gmail] @ git+https://github.com/edwardmfho/SelfBenchmarkMCP.git#subdirectory=conversation-analyser",
         "gmail-fetcher"
       ]
     }
