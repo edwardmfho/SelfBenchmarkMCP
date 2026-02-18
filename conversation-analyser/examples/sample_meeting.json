@@ -1,0 +1,70 @@
+[
+    {
+        "role": "user",
+        "content": "Good morning everyone. Let's get started. The main agenda today is the Q1 roadmap review and resource allocation for the new AI features."
+    },
+    {
+        "role": "assistant",
+        "content": "Thanks for kicking us off. Before we dive in, I want to flag that the engineering team is at 90% capacity right now. We need to be realistic about what we can commit to in Q1."
+    },
+    {
+        "role": "user",
+        "content": "Understood. Let's look at the three proposed initiatives: the recommendation engine upgrade, the real-time analytics dashboard, and the customer-facing AI assistant. Which one do we prioritise?"
+    },
+    {
+        "role": "assistant",
+        "content": "From a revenue impact perspective, the AI assistant has the highest potential — we have three enterprise customers waiting on it. But it's also the most complex. The analytics dashboard is lower risk and we could ship it in 6 weeks."
+    },
+    {
+        "role": "user",
+        "content": "What's the customer commitment situation? Do we have contractual obligations on the AI assistant?"
+    },
+    {
+        "role": "assistant",
+        "content": "Not contractual, but we've made verbal commitments to Acme Corp, TechFlow, and GlobalBank. Delaying further could put those deals at risk. Sarah estimated a $2.4M ARR impact if we lose even one of them."
+    },
+    {
+        "role": "user",
+        "content": "That changes the calculus. Let's prioritise the AI assistant then. What do we need to make it happen?"
+    },
+    {
+        "role": "assistant",
+        "content": "We need two additional senior engineers for 8 weeks, plus a dedicated QA resource. I'd also recommend bringing in the design team earlier — the UX on the current prototype isn't production-ready."
+    },
+    {
+        "role": "user",
+        "content": "Can we pull from the platform team temporarily?"
+    },
+    {
+        "role": "assistant",
+        "content": "We could pull Marcus and Priya. They've worked on similar features before. But that would delay the infrastructure migration by 3 weeks."
+    },
+    {
+        "role": "user",
+        "content": "What's the risk of delaying the infrastructure migration?"
+    },
+    {
+        "role": "assistant",
+        "content": "Moderate risk. We're running on legacy systems that are stable but not scalable. If we hit a traffic spike — which is likely given the new customer onboarding — we could see performance degradation. It's a calculated risk."
+    },
+    {
+        "role": "user",
+        "content": "Okay. Decision: we prioritise the AI assistant. Marcus and Priya move to that team starting Monday. We accept the infrastructure migration delay. James, can you update the roadmap and send it to the board by Thursday?"
+    },
+    {
+        "role": "assistant",
+        "content": "Will do. I'll also prepare a risk summary for the board so they're aware of the infrastructure trade-off."
+    },
+    {
+        "role": "user",
+        "content": "Perfect. Any other business before we close?"
+    },
+    {
+        "role": "assistant",
+        "content": "One thing — we should schedule a mid-sprint check-in in 3 weeks to assess progress. Given the complexity, I want an early warning system if we're falling behind."
+    },
+    {
+        "role": "user",
+        "content": "Agreed. Let's put that in the calendar. Thanks everyone, great discussion."
+    }
+]

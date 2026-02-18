@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conversation-analyser-mcp"
+version = "0.1.0"
+description = "MCP servers for analysing conversations and fetching Gmail threads using MCP Sampling"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+dependencies = [
+    "mcp>=1.0.0",
+]
+
+[project.optional-dependencies]
+gmail = [
+    "google-auth>=2.0",
+    "google-auth-oauthlib>=1.0",
+    "google-auth-httplib2>=0.2",
+    "google-api-python-client>=2.0",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[project.scripts]
+conversation-analyser = "servers.analyser.server:main"
+gmail-fetcher = "servers.gmail.server:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["servers*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
