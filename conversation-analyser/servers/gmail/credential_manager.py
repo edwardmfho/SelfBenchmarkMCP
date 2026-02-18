@@ -36,31 +36,32 @@ Follow these steps to connect the Gmail Fetcher to your Gmail account.
 5. Click **Download JSON** — this is your `credentials.json`
 
 ### Step 4 — Place the Credentials File
-Save the downloaded file to:
+First, create the configuration directory by running this command in your terminal:
+```bash
+mkdir -p "{config_dir}"
 ```
-{credentials_path}
+
+Then, move the downloaded `credentials.json` to that folder:
+```bash
+mv ~/Downloads/credentials.json "{credentials_path}"
 ```
 
 ### Step 5 — Authorise (first run)
-The first time you call `fetch_thread` or `search_threads`, a browser window
-will open asking you to sign in and grant access. This creates a `token.json`
-file at:
-```
-{token_path}
-```
+Once the file is in place, calling `fetch_thread` or any other tool will open a browser window to authorise access. This creates a `token.json` automatically.
 
 ### 🔒 Security Recommendations
-- **Schedule destruction**: Use `schedule_credential_destruction` to auto-delete
-  credentials after your session (e.g. in 24 hours)
-- **Revoke access**: Visit [Google Account Permissions](https://myaccount.google.com/permissions)
-  to revoke access at any time
-- **Never commit** `credentials.json` or `token.json` to version control
-- Add both files to your `.gitignore`
+- **Schedule destruction**: Use `schedule_credential_destruction` to auto-delete credentials after your session.
+- **Revoke access**: Visit [Google Account Permissions](https://myaccount.google.com/permissions) to revoke access.
+- **Never commit** `credentials.json` or `token.json` to version control.
 """.strip()
 
 
 def get_setup_guide() -> str:
+    # Proactively create the directory so the user doesn't get "folder not found" errors
+    # when trying to save their credentials.json manually.
+    _CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     return _SETUP_GUIDE.format(
+        config_dir=str(_CONFIG_DIR),
         credentials_path=str(_CREDENTIALS_FILE),
         token_path=str(_TOKEN_FILE),
     )
