@@ -97,6 +97,11 @@ Structure your response as JSON with these keys:
     - "manual_time" is estimated hours without AI (float)
     - "agentic_time" is estimated hours with AI (float)
     - "savings" is manual_time - agentic_time (float)
+- "impact_stories": list of specific examples of work items found.
+    - "description": Description of work (e.g. "Built pitch deck")
+    - "manual_duration": string (e.g. "3 days")
+    - "ai_duration": string (e.g. "0.5 days")
+    - "impact_summary": One line narrative (e.g. "Automating data collection saved 2.5 days")
 - "key_findings": list of 3-5 specific achievements or notable items.
 - "total_manual_time": sum of all manual_time (float)
 - "total_agentic_time": sum of all agentic_time (float)

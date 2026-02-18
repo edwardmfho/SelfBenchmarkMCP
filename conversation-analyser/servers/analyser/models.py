@@ -80,6 +80,10 @@ class AnalysisResult(BaseModel):
         default_factory=list,
         description="Per-chunk partial results (empty for single-chunk analyses)",
     )
+    impact_stories: list[dict] = Field(
+        default_factory=list,
+        description="Specific narrative examples of time savings (for benchmark)",
+    )
     model_used: str = Field(description="Model name used for the final synthesis")
     stop_reason: str | None = Field(default=None)
 

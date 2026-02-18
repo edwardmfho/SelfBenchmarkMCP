@@ -4,25 +4,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conversation Scorecard</title>
+  <title>Inbox Intelligence Brief</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
   <style>
     :root {
-      --base-bg: #0f172a;
-      --card-bg: rgba(30, 41, 59, 0.7);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --primary: #38bdf8;
-      --secondary: #818cf8;
-      --accent: #f472b6;
-      --success: #34d399;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --gradient-1: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-      --gradient-2: linear-gradient(135deg, #f472b6 0%, #fb923c 100%);
-      --radius: 24px;
-      --transition: .3s cubic-bezier(.4, 0, .2, 1);
+      --bg-paper: #FDFBF7;
+      --text-ink: #1a1a1a;
+      --text-muted: #595959;
+      --accent-red: #C53030;
+      --accent-gold: #D69E2E;
+      --border-heavy: 2px solid #1a1a1a;
+      --border-light: 1px solid #e5e5e5;
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'Inter', sans-serif;
     }
 
     * {
@@ -32,308 +30,290 @@
     }
 
     body {
-      font-family: 'Outfit', sans-serif;
-      background-color: var(--base-bg);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
       padding: 40px 20px;
-      background-image:
-        radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 90% 90%, rgba(244, 114, 182, 0.08) 0%, transparent 40%);
     }
 
     .container {
-      width: 100%;
       max-width: 900px;
-      animation: fadeIn 0.8s ease-out;
-    }
-
-    .glass {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
-      border-radius: 32px;
-      padding: 40px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    header h1 {
-      font-size: 2.8rem;
-      font-weight: 700;
-      background: var(--gradient-1);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 10px;
-      letter-spacing: -1px;
-    }
-
-    .meta-badges {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 6px 14px;
-      border-radius: 100px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--glass-border);
-      color: var(--text-muted);
-    }
-
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 20px;
-      margin-bottom: 40px;
-      padding-bottom: 30px;
-      border-bottom: 1px solid var(--glass-border);
-    }
-
-    .h-stat {
-      text-align: center;
-    }
-
-    .h-stat-val {
-      font-size: 2rem;
-      font-weight: 700;
-      display: block;
-      color: var(--primary);
-    }
-
-    .text-success {
-      color: var(--success);
-    }
-
-    .text-accent {
-      color: var(--accent);
-    }
-
-    .h-stat-label {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* Comparison Bar Chart */
-    .comparison-chart {
-      margin-bottom: 40px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .chart-title {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      margin-bottom: 15px;
-      text-align: center;
-    }
-
-    .bar-container {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 12px;
-    }
-
-    .bar-label {
-      width: 100px;
-      text-align: right;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .bar-track {
-      flex: 1;
-      height: 24px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      overflow: hidden;
+      margin: 0 auto;
       position: relative;
     }
 
-    .bar-fill {
-      height: 100%;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: white;
-      min-width: 40px;
-      transition: width 1s ease-out;
-    }
-
-    .bar-manual {
-      background: var(--secondary);
-    }
-
-    .bar-agentic {
-      background: var(--success);
-    }
-
-    .summary-box {
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 20px;
-      padding: 25px;
+    /* HEADER / MASTHEAD */
+    header {
+      text-align: center;
+      border-bottom: var(--border-heavy);
+      padding-bottom: 20px;
       margin-bottom: 40px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      line-height: 1.7;
+      position: relative;
     }
 
-    .grid-sections {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 30px;
+    header::after {
+      content: "";
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      border-bottom: 1px solid #1a1a1a;
     }
 
-    h2 {
-      font-size: 1.3rem;
-      margin-bottom: 20px;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* Accordion / Cards */
-    .section-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
-      margin-bottom: 15px;
-      overflow: hidden;
-      transition: var(--transition);
-    }
-
-    .section-card:hover {
-      border-color: var(--primary);
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .card-header {
-      padding: 16px 20px;
+    .masthead-meta {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      cursor: pointer;
-      user-select: none;
     }
 
-    .card-title {
-      font-weight: 600;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .score-chip {
-      background: var(--gradient-1);
-      color: white;
-      padding: 2px 10px;
-      border-radius: 100px;
-      font-size: 0.75rem;
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 4rem;
       font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 5px;
     }
 
-    .card-content {
+    .sub-masthead {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+    }
+
+    /* HERO STATS - "The Ticker" */
+    .hero-ticker {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: var(--border-light);
+      padding-bottom: 30px;
+      margin-bottom: 40px;
+    }
+
+    .ticker-item {
+      text-align: center;
       padding: 0 20px;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease, padding 0.4s ease;
-      font-size: 0.9rem;
+      border-right: var(--border-light);
+    }
+
+    .ticker-item:last-child {
+      border-right: none;
+    }
+
+    .ticker-val {
+      font-family: var(--font-serif);
+      font-size: 3.5rem;
+      font-weight: 700;
+      display: block;
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .ticker-label {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       color: var(--text-muted);
-      line-height: 1.6;
     }
 
-    .section-card.open .card-content {
-      max-height: 1000px;
-      padding: 0 20px 20px;
+    /* IMPACT STORIES - "The Lead Stories" */
+    .section-header {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #1a1a1a;
+      padding-bottom: 5px;
+      margin-bottom: 25px;
+      display: inline-block;
     }
 
-    .time-breakdown {
-      display: flex;
-      gap: 15px;
-      margin-top: 10px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      background: rgba(0, 0, 0, 0.2);
-      padding: 8px 12px;
-      border-radius: 8px;
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin-bottom: 50px;
     }
 
-    .findings-list {
-      list-style: none;
+    .story-card {
+      padding: 25px;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
     }
 
-    .finding-item {
-      display: flex;
-      gap: 12px;
-      padding: 12px 15px;
-      background: rgba(129, 140, 248, 0.05);
-      border-radius: 14px;
+    .story-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .story-title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 700;
       margin-bottom: 10px;
-      border-left: 3px solid var(--secondary);
+      color: var(--text-ink);
+    }
+
+    .story-comparison {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 15px;
+      font-family: var(--font-sans);
       font-size: 0.9rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 15px;
+    }
+
+    .comp-segment strong {
+      color: var(--text-ink);
+      font-weight: 600;
+    }
+
+    .arrow-sep {
+      color: #ccc;
+    }
+
+    .story-narrative {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-ink);
+    }
+
+    /* SUMMARY & FINDINGS - "Editorial & Briefs" */
+    .layout-cols {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
+    }
+
+    .editorial-col {
+      padding-right: 30px;
+      border-right: var(--border-light);
+    }
+
+
+
+    .editorial-text {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .bullet-item {
+      margin-bottom: 15px;
+      padding-left: 20px;
+      position: relative;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .bullet-item::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent-red);
+      font-weight: bold;
+    }
+
+    /* CATEGORY TABLE - "The Ledger" */
+    .ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .ledger-table th {
+      text-align: left;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #1a1a1a;
+      padding: 10px 0;
+      color: var(--text-muted);
+    }
+
+    .ledger-table td {
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .ledger-num {
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .savings-tag {
+      display: inline-block;
+      background: #E6FFFA;
+      color: #2C7A7B;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
     }
 
     footer {
       text-align: center;
-      margin-top: 50px;
+      margin-top: 60px;
       padding-top: 20px;
-      border-top: 1px solid var(--glass-border);
-      color: var(--text-muted);
+      border-top: var(--border-light);
+      font-family: var(--font-sans);
       font-size: 0.75rem;
-      font-weight: 500;
+      color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(15px);
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
       }
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 600px) {
-      .glass {
-        padding: 25px;
-      }
-
-      header h1 {
-        font-size: 2rem;
-      }
-
-      .grid-sections {
+      .hero-ticker {
         grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .ticker-item {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+      }
+
+      .layout-cols {
+        grid-template-columns: 1fr;
+      }
+
+      .editorial-col {
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 30px;
+        margin-bottom: 30px;
       }
     }
   </style>
@@ -341,35 +321,70 @@
 
 <body>
   <div class="container">
-    <div class="glass" id="app">
-      <header>
-        <h1 id="title">Analytics Dashboard</h1>
-        <div class="meta-badges" id="badges"></div>
-      </header>
-
-      <div class="hero-stats" id="hero-stats"></div>
-
-      <div id="comparison-container"></div>
-
-      <div class="summary-box">
-        <p id="summary">Analyzing conversation data...</p>
+    <!-- MASTHEAD -->
+    <header>
+      <div class="masthead-meta">
+        <span id="date-display">...</span>
+        <span>Self-Benchmark Series</span>
+        <span>Vol. <span id="vol-num">1</span></span>
       </div>
+      <h1>Inbox Intelligence</h1>
+      <div class="sub-masthead">An Efficiency Report on Your Recent Digital Activity</div>
+    </header>
 
-      <div class="grid-sections">
-        <div class="col">
-          <h2 id="sections-label">🔍 Analysis Sections</h2>
-          <div id="sections-container"></div>
-        </div>
-        <div class="col">
-          <h2>💡 Key Findings</h2>
-          <div id="findings-container" class="findings-list"></div>
-        </div>
-      </div>
-
-      <footer id="footer">
-        Generated by Conversation Analyser
-      </footer>
+    <!-- HERO TICKER -->
+    <div class="hero-ticker" id="hero-ticker">
+      <!-- Injected via JS -->
     </div>
+
+    <!-- IMPACT STORIES -->
+    <div id="stories-section" style="display:none;">
+      <div class="section-header">The Efficiency Log</div>
+      <div class="story-grid" id="story-grid">
+        <!-- Stories injected here -->
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT COLS -->
+    <div class="layout-cols">
+      <!-- LEFT: Summary & Ledger -->
+      <div class="editorial-col">
+        <div class="section-header">Executive Brief</div>
+        <div class="editorial-text" id="summary-text">
+          <!-- Summary injected here -->
+        </div>
+
+        <div style="margin-top: 40px;">
+          <div class="section-header">Activity Ledger</div>
+          <table class="ledger-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Activity</th>
+                <th class="ledger-num">Pre-AI</th>
+                <th class="ledger-num">With AI</th>
+                <th class="ledger-num">Saved</th>
+              </tr>
+            </thead>
+            <tbody id="ledger-body">
+              <!-- Ledger rows injected here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RIGHT: Key Findings -->
+      <div class="briefs-col">
+        <div class="section-header">Key Findings</div>
+        <ul class="bullet-list" id="findings-list">
+          <!-- Findings injected here -->
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      Generated by Conversation Analyser MCP • CONFIDENTIAL BRIEF
+    </footer>
   </div>
 
   <script id="scorecard-data" type="application/json">null</script>
@@ -377,125 +392,106 @@
   <script>
     const DATA = JSON.parse(document.getElementById('scorecard-data').textContent);
 
+    function formatDate() {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date().toLocaleDateString('en-US', options);
+    }
+    document.getElementById('date-display').textContent = formatDate();
+    document.getElementById('vol-num').textContent = Math.floor(Math.random() * 100) + 1; // Simulation
+
     if (DATA) {
-      // Title & Badges
-      document.getElementById('title').textContent = (DATA.work_type || 'Conversation').replace(/_/g, ' ') + ' Analysis';
-
-      const badgeList = [DATA.analysis_type, DATA.model_used, DATA.source_format].filter(Boolean);
-      document.getElementById('badges').innerHTML = badgeList.map(b => `<span class="badge">${b}</span>`).join('');
-
-      // Hero Stats
-      const statItems = [];
+      // 1. HERO TICKER
+      const tickerEl = document.getElementById('hero-ticker');
+      let tickerHtml = '';
 
       if (DATA.total_manual_time && DATA.total_agentic_time) {
-        // If we have specific benchmark data
-        statItems.push({ label: 'Manual Time', val: DATA.total_manual_time + 'h' });
-        statItems.push({ label: 'Agentic Time', val: DATA.total_agentic_time + 'h', class: 'text-success' });
-        const saved = (DATA.total_savings || (DATA.total_manual_time - DATA.total_agentic_time)).toFixed(1);
-        statItems.push({ label: 'Time Saved', val: saved + 'h', class: 'text-accent' });
+        // Benchmark Mode
+        const saved = DATA.total_savings || (DATA.total_manual_time - DATA.total_agentic_time);
+        tickerHtml = `
+                    <div class="ticker-item">
+                        <span class="ticker-val">${DATA.total_manual_time}h</span>
+                        <span class="ticker-label">Manual Effort</span>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="ticker-val" style="color: var(--accent-gold);">${DATA.total_agentic_time}h</span>
+                        <span class="ticker-label">Agentic Effort</span>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="ticker-val" style="color: var(--accent-red);">${saved.toFixed(1)}h</span>
+                        <span class="ticker-label">Time Reclaimed</span>
+                    </div>
+                `;
       } else {
-        // Generic fallback
-        statItems.push({ label: 'Turns', val: DATA.turn_count });
-        statItems.push({ label: 'Chunks', val: DATA.chunk_count });
-        statItems.push({ label: 'Type', val: DATA.analysis_type });
+        // Standard Mode
+        tickerHtml = `
+                    <div class="ticker-item">
+                        <span class="ticker-val">${DATA.turn_count || 0}</span>
+                        <span class="ticker-label">Total Turns</span>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="ticker-val">${DATA.chunk_count || 1}</span>
+                        <span class="ticker-label">Analysis Chunks</span>
+                    </div>
+                     <div class="ticker-item">
+                        <span class="ticker-val" style="font-size: 2rem;">${(DATA.analysis_type || 'General').substring(0, 10)}</span>
+                        <span class="ticker-label">Focus Area</span>
+                    </div>
+                `;
+      }
+      tickerEl.innerHTML = tickerHtml;
+
+      // 2. IMPACT STORIES (If available)
+      if (DATA.impact_stories && DATA.impact_stories.length > 0) {
+        document.getElementById('stories-section').style.display = 'block';
+        const gridEl = document.getElementById('story-grid');
+        gridEl.innerHTML = DATA.impact_stories.map(story => `
+                    <div class="story-card">
+                        <div class="story-title">${story.description}</div>
+                        <div class="story-comparison">
+                            <span class="comp-segment">Traditional: <strong>${story.manual_duration}</strong></span>
+                            <span class="arrow-sep">→</span>
+                            <span class="comp-segment">Agentic: <strong>${story.ai_duration}</strong></span>
+                        </div>
+                        <div class="story-narrative">"${story.impact_summary}"</div>
+                    </div>
+                `).join('');
       }
 
-      document.getElementById('hero-stats').innerHTML = statItems.map(s => `
-        <div class="h-stat">
-          <span class="h-stat-val ${s.class || ''}">${s.val || '—'}</span>
-          <span class="h-stat-label">${s.label}</span>
-        </div>
-      `).join('');
+      // 3. EXECUTIVE BRIEF (Summary)
+      document.getElementById('summary-text').textContent = DATA.summary;
 
-      // Visual Comparison (only for benchmark)
-      if (DATA.total_manual_time && DATA.total_agentic_time) {
-        const manual = parseFloat(DATA.total_manual_time);
-        const agentic = parseFloat(DATA.total_agentic_time);
-        const max = Math.max(manual, agentic) * 1.1; // 10% buffering
+      // 4. ACTIVITY LEDGER (Sections)
+      const ledgerBody = document.getElementById('ledger-body');
+      (DATA.sections || []).forEach(sec => {
+        const tr = document.createElement('tr');
 
-        const manualPct = (manual / max) * 100;
-        const agenticPct = (agentic / max) * 100;
+        // Content truncation
+        const contentShort = sec.content.length > 60 ? sec.content.substring(0, 60) + '...' : sec.content;
 
-        document.getElementById('comparison-container').innerHTML = `
-            <div class="comparison-chart">
-                <div class="chart-title">Manual vs Agentic Workflow Efficiency</div>
-                <div class="bar-container">
-                    <div class="bar-label">Manual</div>
-                    <div class="bar-track">
-                        <div class="bar-fill bar-manual" style="width: ${manualPct}%">${manual}h</div>
-                    </div>
-                </div>
-                <div class="bar-container">
-                    <div class="bar-label">Agentic (AI)</div>
-                    <div class="bar-track">
-                        <div class="bar-fill bar-agentic" style="width: ${agenticPct}%">${agentic}h</div>
-                    </div>
-                </div>
-            </div>
-          `;
-      }
-
-      // Summary
-      document.getElementById('summary').textContent = DATA.summary;
-
-      // Sections (Accordion)
-      const sectionsLabel = DATA.analysis_type === 'benchmark' ? '🏢 Work Categories' : '🔍 Analysis Sections';
-      document.getElementById('sections-label').innerHTML = sectionsLabel;
-
-      const sectionsContainer = document.getElementById('sections-container');
-      (DATA.sections || []).forEach((sec, idx) => {
-        const card = document.createElement('div');
-        card.className = 'section-card';
-
-        let scoreHtml = '';
+        // Savings badge
+        let savedCell = '—';
         if (sec.savings) {
-          scoreHtml = `<span class="score-chip" style="background:var(--success)">-${sec.savings}h</span>`;
-        } else if (sec.score !== undefined && sec.score !== null) {
-          scoreHtml = `<span class="score-chip">${DATA.analysis_type === 'benchmark' ? sec.score + 'h' : Math.round(sec.score * 100) + '%'}</span>`;
+          savedCell = `<span class="savings-tag">-${sec.savings}h</span>`;
         }
 
-        let extraContent = '';
-        if (sec.manual_time && sec.agentic_time) {
-          extraContent = `
-                <div class="time-breakdown">
-                    <span>⏳ Manual: ${sec.manual_time}h</span>
-                    <span>🤖 Agentic: ${sec.agentic_time}h</span>
-                </div>
-            `;
-        }
-
-        card.innerHTML = `
-          <div class="card-header">
-            <span class="card-title">${sec.title}</span>
-            <div style="display: flex; align-items: center; gap: 10px;">
-              ${scoreHtml}
-              <span class="arrow">▼</span>
-            </div>
-          </div>
-          <div class="card-content">
-            ${sec.content}
-            ${extraContent}
-          </div>
-        `;
-
-        card.querySelector('.card-header').onclick = () => {
-          card.classList.toggle('open');
-          card.querySelector('.arrow').style.transform = card.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
-        };
-
-        sectionsContainer.appendChild(card);
+        tr.innerHTML = `
+                    <td><strong>${sec.title}</strong></td>
+                    <td style="color: var(--text-muted);">${contentShort}</td>
+                    <td class="ledger-num">${sec.manual_time ? sec.manual_time + 'h' : '—'}</td>
+                    <td class="ledger-num">${sec.agentic_time ? sec.agentic_time + 'h' : '—'}</td>
+                    <td class="ledger-num">${savedCell}</td>
+                `;
+        ledgerBody.appendChild(tr);
       });
 
-      // Findings
-      const findingsContainer = document.getElementById('findings-container');
+      // 5. KEY FINDINGS
+      const listEl = document.getElementById('findings-list');
       (DATA.key_findings || []).forEach(f => {
-        const item = document.createElement('div');
-        item.className = 'finding-item';
-        item.innerHTML = `<span>⚡</span><span>${f}</span>`;
-        findingsContainer.appendChild(item);
+        const li = document.createElement('li');
+        li.className = 'bullet-item';
+        li.textContent = f;
+        listEl.appendChild(li);
       });
-
-      document.getElementById('footer').textContent = `Generated by Conversation Analyser MCP • ${new Date().toLocaleDateString()}`;
     }
   </script>
 </body>

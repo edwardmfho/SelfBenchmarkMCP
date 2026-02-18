@@ -50,6 +50,12 @@ def build_scorecard(
         return template.replace(_INJECT_PLACEHOLDER, replacement)
 
     # Fallback minimal scorecard
+    import logging
+
+    logger = logging.getLogger(__name__)
+    logger.warning(
+        f"Scorecard template not found at {_TEMPLATE_FILE}. Using minimal fallback."
+    )
     return _minimal_scorecard(payload, data_json)
 
 
@@ -79,6 +85,21 @@ def _minimal_scorecard(payload: dict[str, Any], data_json: str) -> str:
           <div class="card-title">{title} {score_badge}</div>
           <div class="card-body">{content}</div>
         </div>"""
+
+    # Impact stories fallback
+    stories = payload.get("impact_stories", [])
+    if stories:
+        sections_html += "<h2>Impact Stories</h2>"
+        for story in stories:
+            sections_html += f"""
+            <div class="card">
+                <div class="card-title">{html.escape(str(story.get("description", "")))}</div>
+                <div class="card-body">
+                    <strong>{story.get("manual_duration", "")} → {story.get("ai_duration", "")}</strong><br>
+                    <em>{html.escape(str(story.get("impact_summary", "")))}</em>
+                </div>
+            </div>
+            """
 
     findings_html = "".join(f"<li>{html.escape(str(f))}</li>" for f in key_findings)
 

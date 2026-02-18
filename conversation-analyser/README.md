@@ -1,6 +1,6 @@
 # Conversation Analyser MCP Servers
 
-Two MCP servers that analyse conversations using **MCP Sampling** — the LLM runs in your client (Claude Desktop), not on the server.
+Two MCP servers that analyse conversations to identify work and estimate manual time saved.
 
 ## Servers
 
